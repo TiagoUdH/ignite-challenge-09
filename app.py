@@ -2,6 +2,7 @@ from flask import Flask, render_template, session
 from flask_socketio import SocketIO, emit
 
 import uuid
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
@@ -16,7 +17,8 @@ def index():
 
 @socketio.on('message')
 def handle_message(msg):
-    message = f'Usuário {session['user_number']}: {msg}'
+    time = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+    message = f'Usuário {session['user_number']} às {time}: {msg}'
     emit('message', message, broadcast=True)
     
 @socketio.on('connect')
